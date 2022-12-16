@@ -1,0 +1,8 @@
+#redefining a variable, should be an error #
+whole yx := 5 ;
+program
+begin
+   whole yx := 7 ;
+   assign yx = yx * 5 - 3 + 8 / : 11 ;
+   output yx ;
+end
