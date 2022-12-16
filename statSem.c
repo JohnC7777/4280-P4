@@ -116,16 +116,26 @@ bool findGlobal(char* var){
 	}
 	return false;
 }
+char* returnWord = NULL;
 
 char* getTempName(){
 	printf("**Entered getTempName function\n");
 	numTemporaries++;
-	char* returnWord = (char*) malloc(100);
+	free(returnWord);
+	printf("Just incremented numTemporaries and free'd returnWord\n");
+	//char* returnWord = NULL;
+	printf("I was able to set it to NULL\n");
+	returnWord = (char *) malloc(sizeof(returnWord));
+	//returnWord = (char*) malloc(100);
+	printf("just created returnWord\n");
 	strcpy(returnWord,"");
+	printf("just set it to ''\n");
 	strcat(returnWord,"T");
+	printf("Added T to it\n");
 	char temp[5];
 	sprintf(temp, "%d", numTemporaries);
 	strcat(returnWord, temp);
+	printf("Leaving getTempName function and returning:%s\n", returnWord);
 	return returnWord;
 }
 
@@ -409,8 +419,9 @@ void funcBlock(treenode* myNode){
 void funcExpr(treenode* myNode, bool prevSubtraction){
 	printf("**Entered expr function\n");
 	if(myNode->second != NULL){
+		printf("We just checked and the second is not NULL \n");
 		char* temp = getTempName();
-		funcExpr(myNode->second, true);
+		funcExpr(myNode->third, true);
 		writeFile("STORE", temp);
 		checkNode(myNode->first);
 		if(prevSubtraction){
@@ -419,7 +430,12 @@ void funcExpr(treenode* myNode, bool prevSubtraction){
 			writeFile("SUB", temp);
 		}
 	}else{
+		printf("We entered the else statement!\n");
+		if(myNode->first==NULL){
+		printf("It is NULL!!!!\n");
+		}
 		checkNode(myNode->first);
+		
 	}
 }
 
