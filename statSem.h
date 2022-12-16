@@ -6,5 +6,5 @@ void funcR(treenode*);
 void funcInput(treenode*);
 void funcAssign(treenode*);
 void funcVars(treenode*, int*);
-
+void writeFile(char*, char*);
 

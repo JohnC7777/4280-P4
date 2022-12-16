@@ -22,6 +22,7 @@ stack* stack1 = NULL;
 stack* globals = NULL;
 stack* testing = NULL;
 
+FILE * fPointer;
 char* fileName2;
 char* assemblyFileName;
 bool isGlobal;
@@ -109,11 +110,30 @@ int find(char* word){
 void statSem(char* filename){
 	fileName2 = filename;
 	assemblyFileName = strcat(fileName2, ".asm");
+	printf("This is the filename:%s\n", assemblyFileName);	
+	
+	fPointer = fopen(assemblyFileName, "w");
+	fprintf(fPointer, "This is a test\nnewline\n");
+	fclose(fPointer);
+	
+	writeFile("Test write", "arg1");
 	
 	isGlobal = true;
 	traversal(parsedTree);
 	printf("No errors detected!\n");
 }
+
+void writeFile(char* statement, char* arg1){
+	fPointer = fopen(assemblyFileName, "a");
+	char* completeStatement;
+	strcpy(completeStatement, "");
+	completeStatement = strcat(completeStatement, statement);
+	completeStatement = strcat(completeStatement, " ");
+	completeStatement = strcat(completeStatement, arg1);
+	fprintf(fPointer, completeStatement);
+
+}
+
 
 traversal(treenode* myNode){
 	int varsCount = 0;
