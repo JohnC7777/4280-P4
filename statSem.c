@@ -8,6 +8,7 @@
 #include <sys/types.h>
 #include <stdbool.h>
 #include <stddef.h>
+#include <errno.h>
 
 #include "scanner.h"
 #include "parser.h"
@@ -145,45 +146,38 @@ void statSem(char* filename){
 }
 
 void writeFile(char* statement, char* arg1){
-	printf("Just entered writeFile function with values:%s AND %s\n", statement, arg1);
+	printf("**Entered writeFile function with values:%s AND %s\nWith the filename being:%s\n", statement, arg1, assemblyFileName);
 	fPointer = fopen(assemblyFileName, "a");
-	printf("set the fpointer succesfully\n");
-	char* completeStatement = "";
-	printf("declared complete statement! Value is:%s\n", completeStatement);
-	//memset(completeStatement, 0, strlen(completeStatement));
-	//memset(completeStatement, 0, 10);
-	//printf("Just did memset!\n");
-	//strcpy(completeStatement, "");
-	printf("set completeStatement to NULL.\n");
-	if(strcmp(arg1, "N/A")==0){
-		completeStatement = strcat(completeStatement, statement);
+	printf("set the fpointer to fopen\n");
+	if(!fPointer){
+		printf("ERROR: Something went wrong when trying to write to file:%s", strerror(errno));
 	}else{
-		completeStatement = strcat(completeStatement, statement);
-		completeStatement = strcat(completeStatement, " ");
-		completeStatement = strcat(completeStatement, arg1);
+		if(strcmp(arg1, "N/A")==0){
+			fprintf(fPointer, "%s", statement);
+		}else{
+			fprintf(fPointer,"%s", statement);
+			fprintf(fPointer, " ");
+			fprintf(fPointer,"%s", arg1);
+		}
+		fprintf(fPointer, "\n");
+		printf("Finished writing into the file\n");
+		//fclose(fPointer);
 	}
-	printf("succesfully set completeStatement to the whole statement!\n");
-	completeStatement = strcat(completeStatement, "\n");
-	fprintf(fPointer, completeStatement);
-	fclose(fPointer);
 }
 
 
 traversal(treenode* myNode){
-	printf("Entering traversal function with name:%s\n", myNode->name);
+	printf("**Entering traversal function with name:%s\n", myNode->name);
 	int varsCount = 0;
 	int i;
 	for (i = 1; i < 6; i++) {
-		printf("entering loop with i=%d\n", i);
-		printf("The first childs value is:%s\n", myNode->first->value.tkInstance);
-		printf("Test\n");
+		printf("traversing children with i=%d\n", i);
 		treenode* currentChild;
 		if (i == 1) {
 			if(myNode->first==NULL){
 				continue;
 			}
 			currentChild = myNode->first;
-			printf("succesfully set the currentChild to first!\n");
 		} else if (i == 2) {
 			if(myNode->second==NULL){
 				continue;
@@ -228,7 +222,7 @@ traversal(treenode* myNode){
 
 void checkNode(treenode* myNode){
 
-	printf("Entered checkNode function with name:%s\n", myNode->name);
+	printf("**Entered checkNode function with name:%s\n", myNode->name);
 		
 	if (strcmp(myNode->name, "<assign>")==0) {
 		funcAssign(myNode);
@@ -238,7 +232,7 @@ void checkNode(treenode* myNode){
 		funcR(myNode);
 	} else if (strcmp(myNode->name, "<label>")==0) {
 		funcLabel(myNode);
-	} else if (strcmp(myNode->name, "<label>")==0) {
+	} else if (strcmp(myNode->name, "<block>")==0) {
 		funcBlock(myNode);
 	} else if (strcmp(myNode->name, "<expr>")==0) {
 		funcExpr(myNode, false);
@@ -297,6 +291,7 @@ void funcR(treenode* myNode){
 }
 
 void funcInput(treenode* myNode){
+	printf("**Entering input function\n");
 	int found = find(myNode->first->value.tkInstance);
 	if (found == -1) {
 		printf("ERROR: Input found unknown variable! On line:%d Instance'%s'\n", myNode->first->value.lineNum, myNode->first->value.tkInstance);
@@ -335,7 +330,7 @@ void funcAssign(treenode* myNode){
 }
 
 void funcVars(treenode* myNode, int *varsCount){
-	printf("Succesfully entered vars function!\n");
+	printf("**Entered vars function!\n");
 	treenode* currentNode = myNode;
 	treenode* identNode;
 	while(true) {
@@ -388,6 +383,7 @@ void funcLabel(treenode* myNode){
 }
 
 void funcBlock(treenode* myNode){
+	printf("**Entered block function\n");
 	traversal(myNode);
 }
 
@@ -465,10 +461,12 @@ void funcM(treenode* myNode){
 }
 
 void funcStats(treenode* myNode){
+	printf("**Entered stats function\n");
 	traversal(myNode);
 }
 
 void funcStat(treenode* myNode){
+	printf("**Entered stat function\n");
 	traversal(myNode);
 }
 

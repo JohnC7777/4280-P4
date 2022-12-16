@@ -1,8 +1,6 @@
-#redefining a variable, should be an error #
-whole yx := 5 ;
+# p4g1, simplest program possible that does basically anything #
+whole x := 0 ;
 program
 begin
-   whole yx := 7 ;
-   assign yx = yx * 5 - 3 + 8 / : 11 ;
-   output yx ;
+input x ;
 end
