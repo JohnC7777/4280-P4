@@ -388,35 +388,82 @@ void funcExpr(treenode* myNode, bool prevSubtraction){
 }
 
 void funcN(treenode* myNode){
-
+	if(myNode->third != NULL){
+		char* temp = getTempName();
+		checkNode(myNode->third);
+		writeFile("STORE", temp);
+		checkNode(myNode->first);
+		if(strcmp(myNode->second->value.tkInstance, "+")==0){
+			writeFile("ADD", temp);
+		}else{
+			writeFile("MULT", temp);
+		}
+	}else{
+		checkNode(myNode->first);
+	}
 }
 
 void funcA(treenode* myNode){
-
+	checkNode(myNode->first);
+	char* temp = getTempName();
+	writeFile("STORE", temp)
+	checkNode(myNode->second);
 }
 
 void funcA2(treenode* myNode){
+	if(strcmp(myNode->name,"")==0){
+		return;
+	}else{
+		char* prevTemp;
+		strcpy(prevTemp, "");
+		strcat(prevTemp,"T");
+		char temp[5];
+		sprintf(temp, "%d", numTemporaries);
+		strcat(prevTemp, temp);
 
+		checkNode(myNode->first);
+		char* myTemp = getTempName();
+		writeFile("STORE", myTemp);
+
+		writeFile("LOAD", prevTemp);
+		writeFile("DIV", myTemp);
+
+		checkNode(myNode->second);
+	}
 }
 
 void funcM(treenode* myNode){
-
+	if(strcmp(myNode->name, "<M>")==0){
+		char* temp = getTempName();
+		checkNode(myNode->first);
+		writeFile("STORE", temp);
+		writeFile("LOAD", "0");
+		writeFile("SUB", temp);		
+	}else{
+		checkNode(myNode->first);
+	}
 }
 
 void funcStats(treenode* myNode){
-
+	traversal(myNode);
 }
 
 void funcStat(treenode* myNode){
-
+	traversal(myNode);
 }
 
 void funcMStat(treenode* myNode){
-
+	if(strcmp(myNode->name,"")==0){
+		return;
+	}
+	traversal(myNode);
 }
 
 void funcOut(treenode* myNode){
-
+	char* temp = getTempName();
+	checkNode(myNode->first);
+	writeFile("STORE", temp);
+	writeFile("WRITE", temp);
 }
 
 void funcIf(treenode* myNode){
