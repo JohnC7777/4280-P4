@@ -4,6 +4,8 @@ void push(char*);
 int find(char*);
 void writeFile(char*, char*);
 
+void checkNode(treenode*);
+
 void funcR(treenode*);
 void funcInput(treenode*);
 void funcAssign(treenode*);

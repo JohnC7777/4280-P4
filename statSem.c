@@ -198,6 +198,50 @@ traversal(treenode* myNode){
 }
 
 
+void checkNode(treenode* myNode){
+	
+	if (strcmp(myNode->name, "<assign>")==0) {
+		processAssign(myNode);
+	} else if (strcmp(myNode->name, "<in>")==0) {
+		processInput(myNode);
+	} else if (strcmp(myNode->name, "<R>")==0) {
+		processR(myNode);
+	} else if (strcmp(myNode->name, "<label>")==0) {
+		processLabel(myNode);
+	} else if (strcmp(myNode->name, "<label>")==0) {
+		processBlock(myNode);
+	} else if (strcmp(myNode->name, "<expr>")==0) {
+		processExpr(myNode);
+	} else if (strcmp(myNode->name, "<N>")==0) {
+		processN(myNode);
+	} else if (strcmp(myNode->name, "<A>")==0) {
+		processA(myNode);
+	} else if (strcmp(myNode->name, "<A_>")==0) {
+		processA2(myNode);
+	} else if (strcmp(myNode->name, "<M>")==0) {
+		processM(myNode);
+	} else if (strcmp(myNode->name, "<stats>")==0) {
+		processStats(myNode);
+	} else if (strcmp(myNode->name, "<stat>")==0) {
+		processStat(myNode);
+	} else if (strcmp(myNode->name, "<mStat>")==0) {
+		processMStat(myNode);
+	} else if (strcmp(myNode->name, "<out>")==0) {
+		processOut(myNode);
+	} else if (strcmp(myNode->name, "<if>")==0) {
+		processIf(myNode);
+	} else if (strcmp(myNode->name, "<loop>")==0) {
+		processLoop(myNode);
+	} else if (strcmp(myNode->name, "<RO>")==0) {
+		processRO(myNode);
+	} else if (strcmp(myNode->name, "<goto>")==0) {
+		processGoto(myNode);
+	} else if (strcmp(myNode->name, "")==0) {
+		printf("ERROR: Found null unexpectedly\n")
+		exit(0);
+	}	
+}
+
 
 void funcR(treenode* myNode){
 	if (myNode->first->value.tokenID == 1) {
