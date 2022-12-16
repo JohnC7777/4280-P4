@@ -178,7 +178,7 @@ void program(){
 	exit(1); 
    }
     joinNodes(parsedTree, block());
-    //printtree(parsedTree);//Prints tree after the above functions have executed
+    printtree(parsedTree);//Prints tree after the above functions have executed
 }
 
 //BNF: <block> -> begin <vars> <stats> end

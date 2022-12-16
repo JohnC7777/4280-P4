@@ -120,7 +120,7 @@ char* getTempName(){
 	numTemporaries++;
 	char* returnWord;
 	strcpy(returnWord,"");
-	strcat(returnWord,"T")
+	strcat(returnWord,"T");
 	char temp[5];
 	sprintf(temp, "%d", numTemporaries);
 	strcat(returnWord, temp);
@@ -138,17 +138,23 @@ void statSem(char* filename){
 	
 	writeFile("Test write", "arg1");
 	writeFile("This is another Test write without an argument", "N/A");
-	
+
 	isGlobal = true;
 	traversal(parsedTree);
 	printf("No errors detected!\n");
 }
 
 void writeFile(char* statement, char* arg1){
+	printf("Just entered writeFile function with values:%s AND %s\n", statement, arg1);
 	fPointer = fopen(assemblyFileName, "a");
-	char* completeStatement;
-	strcpy(completeStatement, "");
-	
+	printf("set the fpointer succesfully\n");
+	char* completeStatement = "";
+	printf("declared complete statement! Value is:%s\n", completeStatement);
+	//memset(completeStatement, 0, strlen(completeStatement));
+	//memset(completeStatement, 0, 10);
+	//printf("Just did memset!\n");
+	//strcpy(completeStatement, "");
+	printf("set completeStatement to NULL.\n");
 	if(strcmp(arg1, "N/A")==0){
 		completeStatement = strcat(completeStatement, statement);
 	}else{
@@ -156,6 +162,7 @@ void writeFile(char* statement, char* arg1){
 		completeStatement = strcat(completeStatement, " ");
 		completeStatement = strcat(completeStatement, arg1);
 	}
+	printf("succesfully set completeStatement to the whole statement!\n");
 	completeStatement = strcat(completeStatement, "\n");
 	fprintf(fPointer, completeStatement);
 	fclose(fPointer);
@@ -163,15 +170,20 @@ void writeFile(char* statement, char* arg1){
 
 
 traversal(treenode* myNode){
+	printf("Entering traversal function with name:%s\n", myNode->name);
 	int varsCount = 0;
 	int i;
 	for (i = 1; i < 6; i++) {
+		printf("entering loop with i=%d\n", i);
+		printf("The first childs value is:%s\n", myNode->first->value.tkInstance);
+		printf("Test\n");
 		treenode* currentChild;
 		if (i == 1) {
 			if(myNode->first==NULL){
 				continue;
 			}
 			currentChild = myNode->first;
+			printf("succesfully set the currentChild to first!\n");
 		} else if (i == 2) {
 			if(myNode->second==NULL){
 				continue;
@@ -198,8 +210,10 @@ traversal(treenode* myNode){
 			continue;
 		}
 		if (strcmp(currentChild->name, "<vars>")==0) {
+			printf("About to go into vars function\n");
 			funcVars(currentChild, &varsCount);
 		} else {
+			printf("About to go into checkNode\n");
 			checkNode(currentChild);
 		}
 	}
@@ -213,7 +227,9 @@ traversal(treenode* myNode){
 
 
 void checkNode(treenode* myNode){
-	
+
+	printf("Entered checkNode function with name:%s\n", myNode->name);
+		
 	if (strcmp(myNode->name, "<assign>")==0) {
 		funcAssign(myNode);
 	} else if (strcmp(myNode->name, "<in>")==0) {
@@ -295,7 +311,7 @@ void funcInput(treenode* myNode){
 		writeFile("LOAD", temp);
 		char temp2[5];
 		sprintf(temp2, "%d", found);
-		writeFile("STACKW", temp2)	
+		writeFile("STACKW", temp2);
 	}
 
 }
@@ -319,6 +335,7 @@ void funcAssign(treenode* myNode){
 }
 
 void funcVars(treenode* myNode, int *varsCount){
+	printf("Succesfully entered vars function!\n");
 	treenode* currentNode = myNode;
 	treenode* identNode;
 	while(true) {
@@ -332,11 +349,14 @@ void funcVars(treenode* myNode, int *varsCount){
 			break;
 		} else {
 			int found = find(identNode->value.tkInstance);
+			printf("we succesfully found:%d\n", found);
 			if (found != -1) {
 				printf("ERROR: Duplicate variable name! On Line:%d Instance:'%s'\n", identNode->value.lineNum, identNode->value.tkInstance);
 				exit(1);
 			} else {
+				printf("about to write STORE into file\n");
 				writeFile("STORE", identNode->value.tkInstance);
+				printf("Succesfully Stored the value!\n");
 				if(isGlobal){
 					writeFile("STORE", currentNode->second->value.tkInstance);
 					stack* tmp = malloc(sizeof(stack));
@@ -406,7 +426,7 @@ void funcN(treenode* myNode){
 void funcA(treenode* myNode){
 	checkNode(myNode->first);
 	char* temp = getTempName();
-	writeFile("STORE", temp)
+	writeFile("STORE", temp);
 	checkNode(myNode->second);
 }
 
@@ -480,7 +500,7 @@ void funcRO(treenode* myNode){
 }
 
 void funcGoto(treenode* myNode){
-
+	writeFile("BR", myNode->first->value.tkInstance);
 }
 
 
