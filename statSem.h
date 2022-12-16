@@ -1,4 +1,4 @@
-void statSem();
+void statSem(char*);
 void pop();
 void push(char*);
 int find(char*);

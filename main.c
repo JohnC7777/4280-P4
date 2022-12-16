@@ -38,7 +38,7 @@ int main(int argc, char **argv){
 		print();
 		reverse();
 		parser();
-		statSem();
+		statSem(filename);
 	}
 	else{
 		char *string = NULL;

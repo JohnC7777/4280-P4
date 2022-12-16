@@ -21,6 +21,9 @@ typedef struct stack{
 stack* stack1 = NULL;
 stack* globals = NULL;
 stack* testing = NULL;
+
+char* fileName2;
+char* assemblyFileName;
 bool isGlobal;
 
 void push(char* value){
@@ -103,7 +106,10 @@ int find(char* word){
 
 
 
-void statSem(){
+void statSem(char* filename){
+	fileName2 = filename;
+	assemblyFileName = strcat(fileName2, ".asm");
+	
 	isGlobal = true;
 	traversal(parsedTree);
 	printf("No errors detected!\n");
