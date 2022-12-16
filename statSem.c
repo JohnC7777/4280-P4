@@ -26,6 +26,7 @@ FILE * fPointer;
 char* fileName2;
 char* assemblyFileName;
 bool isGlobal;
+int numTemporaries = 0;
 
 void push(char* value){
 	stack *newnode = malloc(sizeof(stack));
@@ -104,8 +105,27 @@ int find(char* word){
 	}
 }
 
+bool findGlobal(char* var){
+	stack *tmp = globals;
+	while (tmp != NULL){
+		if(strcmp(var, tmp->value)==0){
+			return true;
+		}
+		tmp = tmp->next;
+	}
+	return false;
+}
 
-
+char* getTempName(){
+	numTemporaries++;
+	char* returnWord;
+	strcpy(returnWord,"");
+	strcat(returnWord,"T")
+	char temp[5];
+	sprintf(temp, "%d", numTemporaries);
+	strcat(returnWord, temp);
+	return returnWord;
+}
 
 void statSem(char* filename){
 	fileName2 = filename;
@@ -179,14 +199,8 @@ traversal(treenode* myNode){
 		}
 		if (strcmp(currentChild->name, "<vars>")==0) {
 			funcVars(currentChild, &varsCount);
-		} else if (strcmp(currentChild->name, "<assign>")==0) {
-			funcAssign(currentChild);
-		} else if (strcmp(currentChild->name, "<in>")==0) {
-			funcInput(currentChild);
-		} else if (strcmp(currentChild->name, "<R>")==0) {
-			funcR(currentChild);
-		} else if (strcmp(currentChild->name, "")!=0) {
-			traversal(currentChild);
+		} else {
+			checkNode(currentChild);
 		}
 	}
 	if (varsCount != 0) {
@@ -201,43 +215,43 @@ traversal(treenode* myNode){
 void checkNode(treenode* myNode){
 	
 	if (strcmp(myNode->name, "<assign>")==0) {
-		processAssign(myNode);
+		funcAssign(myNode);
 	} else if (strcmp(myNode->name, "<in>")==0) {
-		processInput(myNode);
+		funcInput(myNode);
 	} else if (strcmp(myNode->name, "<R>")==0) {
-		processR(myNode);
+		funcR(myNode);
 	} else if (strcmp(myNode->name, "<label>")==0) {
-		processLabel(myNode);
+		funcLabel(myNode);
 	} else if (strcmp(myNode->name, "<label>")==0) {
-		processBlock(myNode);
+		funcBlock(myNode);
 	} else if (strcmp(myNode->name, "<expr>")==0) {
-		processExpr(myNode);
+		funcExpr(myNode, false);
 	} else if (strcmp(myNode->name, "<N>")==0) {
-		processN(myNode);
+		funcN(myNode);
 	} else if (strcmp(myNode->name, "<A>")==0) {
-		processA(myNode);
+		funcA(myNode);
 	} else if (strcmp(myNode->name, "<A_>")==0) {
-		processA2(myNode);
+		funcA2(myNode);
 	} else if (strcmp(myNode->name, "<M>")==0) {
-		processM(myNode);
+		funcM(myNode);
 	} else if (strcmp(myNode->name, "<stats>")==0) {
-		processStats(myNode);
+		funcStats(myNode);
 	} else if (strcmp(myNode->name, "<stat>")==0) {
-		processStat(myNode);
+		funcStat(myNode);
 	} else if (strcmp(myNode->name, "<mStat>")==0) {
-		processMStat(myNode);
+		funcMStat(myNode);
 	} else if (strcmp(myNode->name, "<out>")==0) {
-		processOut(myNode);
+		funcOut(myNode);
 	} else if (strcmp(myNode->name, "<if>")==0) {
-		processIf(myNode);
+		funcIf(myNode);
 	} else if (strcmp(myNode->name, "<loop>")==0) {
-		processLoop(myNode);
+		funcLoop(myNode);
 	} else if (strcmp(myNode->name, "<RO>")==0) {
-		processRO(myNode);
+		funcRO(myNode);
 	} else if (strcmp(myNode->name, "<goto>")==0) {
-		processGoto(myNode);
+		funcGoto(myNode);
 	} else if (strcmp(myNode->name, "")==0) {
-		printf("ERROR: Found null unexpectedly\n")
+		printf("ERROR: Found null unexpectedly\n");
 		exit(0);
 	}	
 }
@@ -250,8 +264,18 @@ void funcR(treenode* myNode){
 			printf("ERROR: unknown variable found! On line:%d Instance:'%s'\n", myNode->first->value.lineNum, myNode->first->value.tkInstance);
 			exit(1);
 		}
+		bool isGlobalVar = findGlobal(myNode->first->value.tkInstance);
+		if(isGlobalVar){
+			writeFile("LOAD", myNode->first->value.tkInstance);
+		}else{
+			char temp[5];
+			sprintf(temp, "%d", found);
+			writeFile("STACKR", temp);
+		}
 	} else if (strcmp(myNode->first->value.tkInstance, "<expr>")==0) {
-		traversal(myNode->first);
+		checkNode(myNode->first);
+	}else{
+		writeFile("LAOD", myNode->first->value.tkInstance);
 	}
 
 }
@@ -261,6 +285,17 @@ void funcInput(treenode* myNode){
 	if (found == -1) {
 		printf("ERROR: Input found unknown variable! On line:%d Instance'%s'\n", myNode->first->value.lineNum, myNode->first->value.tkInstance);
 		exit(1);
+	}
+	bool isGlobalVar = findGlobal(myNode->first->value.tkInstance);
+	if(isGlobalVar){
+		writeFile("READ", myNode->first->value.tkInstance);
+	}else{
+		char* temp = getTempName();
+		writeFile("READ", temp);
+		writeFile("LOAD", temp);
+		char temp2[5];
+		sprintf(temp2, "%d", found);
+		writeFile("STACKW", temp2)	
 	}
 
 }
@@ -313,14 +348,18 @@ void funcVars(treenode* myNode, int *varsCount){
 }
 
 void funcLabel(treenode* myNode){
-
+	char* temp;
+	strcpy(temp, "");
+	strcat(temp, myNode->first->value.tkInstance);
+	strcat(temp, ":");
+	writeFile(temp,"NOOP");
 }
 
 void funcBlock(treenode* myNode){
 
 }
 
-void funcExpr(treenode* myNode, bool){
+void funcExpr(treenode* myNode, bool prevSubtraction){
 
 }
 

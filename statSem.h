@@ -5,6 +5,7 @@ int find(char*);
 void writeFile(char*, char*);
 
 void checkNode(treenode*);
+bool findGlobal(char*);
 
 void funcR(treenode*);
 void funcInput(treenode*);
