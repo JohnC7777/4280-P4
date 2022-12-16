@@ -6,6 +6,7 @@ void writeFile(char*, char*);
 
 void checkNode(treenode*);
 bool findGlobal(char*);
+void writeVariables();
 
 void funcR(treenode*);
 void funcInput(treenode*);
