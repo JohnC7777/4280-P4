@@ -306,7 +306,15 @@ void funcAssign(treenode* myNode){
 		printf("ERROR: Assign found unknown variable! On line:%d Intance:'%s'\n", myNode->first->value.lineNum, myNode->first->value.tkInstance);
 		exit(1);
 	}
-	traversal(myNode->second);
+	bool isGlobalVar = findGlobal(myNode->first->value.tkInstance);
+	checkNode(myNode->second);
+	if(isGlobalVar){
+		writeFile("STORE", myNode->first->value.tkInstance);
+	}else{
+		char temp[5];
+		sprintf(temp, "%d", found);
+		writeFile("STACKW", temp);
+	}
 
 }
 
@@ -328,12 +336,16 @@ void funcVars(treenode* myNode, int *varsCount){
 				printf("ERROR: Duplicate variable name! On Line:%d Instance:'%s'\n", identNode->value.lineNum, identNode->value.tkInstance);
 				exit(1);
 			} else {
+				writeFile("STORE", identNode->value.tkInstance);
 				if(isGlobal){
+					writeFile("STORE", currentNode->second->value.tkInstance);
 					stack* tmp = malloc(sizeof(stack));
 					strcpy(tmp->value, identNode->value.tkInstance);
 					tmp->next = globals;
 					globals = tmp;
 				}else{
+					writeFile("PUSH", "N/A");
+					writeFile("STACKW", "0");
 					*varsCount = *varsCount+1;			
 					push(identNode->value.tkInstance);
 				}
@@ -356,11 +368,23 @@ void funcLabel(treenode* myNode){
 }
 
 void funcBlock(treenode* myNode){
-
+	traversal(myNode);
 }
 
 void funcExpr(treenode* myNode, bool prevSubtraction){
-
+	if(myNode->second != NULL){
+		char* temp = getTempName();
+		funcExpr(myNode->second, true);
+		writeFile("STORE", temp);
+		checkNode(myNode->first);
+		if(prevSubtraction){
+			writeFile("ADD", temp);
+		}else{
+			writeFile("SUB", temp);
+		}
+	}else{
+		checkNode(myNode->first);
+	}
 }
 
 void funcN(treenode* myNode){
