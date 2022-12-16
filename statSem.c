@@ -134,20 +134,19 @@ void statSem(char* filename){
 	printf("This is the filename:%s\n", assemblyFileName);	
 	
 	fPointer = fopen(assemblyFileName, "w");
-	fprintf(fPointer, "This is a test\nnewline\n");
 	fclose(fPointer);
-	
-	writeFile("Test write", "arg1");
-	writeFile("This is another Test write without an argument", "N/A");
+        fPointer = fopen(assemblyFileName, "a");	
 
 	isGlobal = true;
 	traversal(parsedTree);
+	writeFile("STOP", "N/A");
 	printf("No errors detected!\n");
+	//fclose(fPointer);
 }
 
 void writeFile(char* statement, char* arg1){
 	printf("**Entered writeFile function with values:%s AND %s\nWith the filename being:%s\n", statement, arg1, assemblyFileName);
-	fPointer = fopen(assemblyFileName, "a");
+	//fPointer = fopen(assemblyFileName, "a");
 	printf("set the fpointer to fopen\n");
 	if(!fPointer){
 		printf("ERROR: Something went wrong when trying to write to file:%s", strerror(errno));
@@ -350,10 +349,10 @@ void funcVars(treenode* myNode, int *varsCount){
 				exit(1);
 			} else {
 				printf("about to write STORE into file\n");
-				writeFile("STORE", identNode->value.tkInstance);
+				writeFile("LOAD", currentNode->second->value.tkInstance);
 				printf("Succesfully Stored the value!\n");
 				if(isGlobal){
-					writeFile("STORE", currentNode->second->value.tkInstance);
+					writeFile("STORE", identNode->value.tkInstance);
 					stack* tmp = malloc(sizeof(stack));
 					strcpy(tmp->value, identNode->value.tkInstance);
 					tmp->next = globals;
