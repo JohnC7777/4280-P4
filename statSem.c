@@ -117,6 +117,7 @@ void statSem(char* filename){
 	fclose(fPointer);
 	
 	writeFile("Test write", "arg1");
+	writeFile("This is another Test write without an argument", "N/A");
 	
 	isGlobal = true;
 	traversal(parsedTree);
@@ -127,11 +128,17 @@ void writeFile(char* statement, char* arg1){
 	fPointer = fopen(assemblyFileName, "a");
 	char* completeStatement;
 	strcpy(completeStatement, "");
-	completeStatement = strcat(completeStatement, statement);
-	completeStatement = strcat(completeStatement, " ");
-	completeStatement = strcat(completeStatement, arg1);
+	
+	if(strcmp(arg1, "N/A")==0){
+		completeStatement = strcat(completeStatement, statement);
+	}else{
+		completeStatement = strcat(completeStatement, statement);
+		completeStatement = strcat(completeStatement, " ");
+		completeStatement = strcat(completeStatement, arg1);
+	}
+	completeStatement = strcat(completeStatement, "\n");
 	fprintf(fPointer, completeStatement);
-
+	fclose(fPointer);
 }
 
 
@@ -261,7 +268,66 @@ void funcVars(treenode* myNode, int *varsCount){
 
 }
 
+void funcLabel(treenode* myNode){
 
+}
+
+void funcBlock(treenode* myNode){
+
+}
+
+void funcExpr(treenode* myNode, bool){
+
+}
+
+void funcN(treenode* myNode){
+
+}
+
+void funcA(treenode* myNode){
+
+}
+
+void funcA2(treenode* myNode){
+
+}
+
+void funcM(treenode* myNode){
+
+}
+
+void funcStats(treenode* myNode){
+
+}
+
+void funcStat(treenode* myNode){
+
+}
+
+void funcMStat(treenode* myNode){
+
+}
+
+void funcOut(treenode* myNode){
+
+}
+
+void funcIf(treenode* myNode){
+
+}
+
+
+void funcLoop(treenode* myNode){
+
+}
+
+void funcRO(treenode* myNode){
+
+}
+
+void funcGoto(treenode* myNode){
+
+}
 
 
 
