@@ -267,7 +267,7 @@ void checkNode(treenode* myNode){
 		funcN(myNode);
 	} else if (strcmp(myNode->name, "<A>")==0) {
 		funcA(myNode);
-	} else if (strcmp(myNode->name, "<A_>")==0) {
+	} else if (strcmp(myNode->name, "<A*>")==0) {
 		funcA2(myNode);
 	} else if (strcmp(myNode->name, "<M>")==0) {
 		funcM(myNode);
@@ -380,9 +380,7 @@ void funcVars(treenode* myNode, int *varsCount){
 				printf("ERROR: Duplicate variable name! On Line:%d Instance:'%s'\n", identNode->value.lineNum, identNode->value.tkInstance);
 				exit(1);
 			} else {
-				printf("about to write STORE into file\n");
 				writeFile("LOAD", currentNode->second->value.tkInstance);
-				printf("Succesfully Stored the value!\n");
 				if(isGlobal){
 					writeFile("STORE", identNode->value.tkInstance);
 					stack* tmp = malloc(sizeof(stack));
@@ -425,7 +423,6 @@ void funcExpr(treenode* myNode, bool prevSubtraction){
 		char* temp = getTempName();
 		char exprTemp[20];
 		strcpy(exprTemp, temp);
-		printf("\nTHE TEMP NAME FOR EXPR-> %s\n\n", exprTemp);
 		funcExpr(myNode->third, true);
 		writeFile("STORE expr", exprTemp);
 		checkNode(myNode->first);
@@ -437,7 +434,7 @@ void funcExpr(treenode* myNode, bool prevSubtraction){
 	}else{
 		printf("We entered the else statement!\n");
 		if(myNode->first==NULL){
-		printf("It is NULL!!!!\n");
+			printf("It is NULL!!!!\n");
 		}
 		checkNode(myNode->first);
 		
@@ -475,17 +472,23 @@ void funcA(treenode* myNode){
 
 void funcA2(treenode* myNode){
 	printf("**Entered A2 function");
-	if(strcmp(myNode->first->name,"")==0){
+	if(myNode->first == NULL){
+		printf("\nTHIS SHOULD NOT HAVE HAPPENED!\n\n");
 		return;
-	}else{
-		char* prevTemp;
+	}else if (strcmp(myNode->first->value.tkInstance, "/")==0){
+		printf("\nTHIS SHOULD HAVE HAPPENED!\n\n");
+
+		char* prevTemp = NULL;
+		prevTemp = (char *) malloc(sizeof(prevTemp));
 		strcpy(prevTemp, "");
-		strcat(prevTemp,"T");
+		strcat(prevTemp, "T");
 		char temp[5];
 		sprintf(temp, "%d", numTemporaries);
 		strcat(prevTemp, temp);
+		
+		printf("finished making the string prevTemp with value:%s", prevTemp);
 
-		checkNode(myNode->first);
+		checkNode(myNode->second);
 		char* temp1 = getTempName();
 		char myTemp[20];
 		strcpy(myTemp, temp1);
@@ -494,7 +497,10 @@ void funcA2(treenode* myNode){
 		writeFile("LOAD", prevTemp);
 		writeFile("DIV", myTemp);
 
-		checkNode(myNode->second);
+		checkNode(myNode->third);
+	}else{
+		printf("ERROR: A2 first child is not null and does not contain '/'\n");
+		exit(1);
 	}
 }
 
