@@ -506,11 +506,11 @@ void funcA2(treenode* myNode){
 
 void funcM(treenode* myNode){
 	printf("**Entered M function\n");
-	if(strcmp(myNode->first->name, "<M>")==0){
+	if(strcmp(myNode->first->value.tkInstance, ":")==0){
 		char* temp1 = getTempName();
 		char temp[20];
 		strcpy(temp, temp1);
-		checkNode(myNode->first);
+		checkNode(myNode->second);
 		writeFile("STORE M", temp);
 		writeFile("LOAD", "0");
 		writeFile("SUB", temp);		
