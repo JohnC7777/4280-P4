@@ -28,6 +28,7 @@ char* fileName2;
 char* assemblyFileName;
 bool isGlobal;
 int numTemporaries = 0;
+int numLabels = 0;
 
 void push(char* value){
 	stack *newnode = malloc(sizeof(stack));
@@ -138,6 +139,22 @@ char* getTempName(){
 	//printf("Leaving getTempName function and returning:%s\n", returnWord);
 	return returnWord;
 }
+
+char* returnWord1 = NULL;
+char* getLabelName(){
+	printf("**Entered getLabelName function\n");
+	numLabels++;
+	free(returnWord1);
+	returnWord1 = (char *) malloc(sizeof(returnWord1));
+	strcpy(returnWord1,"");
+	strcat(returnWord1,"L");
+	char temp[5];
+	sprintf(temp, "%d", numLabels);
+	strcat(returnWord1, temp);
+	return returnWord1;
+}
+
+
 
 void writeVariables(){
 	stack *temp = globals;
@@ -485,6 +502,8 @@ void funcA2(treenode* myNode){
 		char temp[5];
 		sprintf(temp, "%d", numTemporaries);
 		strcat(prevTemp, temp);
+		char actualPrevTemp[20];
+		strcpy(actualPrevTemp, prevTemp);
 		
 		printf("finished making the string prevTemp with value:%s", prevTemp);
 
@@ -494,7 +513,7 @@ void funcA2(treenode* myNode){
 		strcpy(myTemp, temp1);
 		writeFile("STORE A2", myTemp);
 
-		writeFile("LOAD", prevTemp);
+		writeFile("LOAD", actualPrevTemp);
 		writeFile("DIV", myTemp);
 
 		checkNode(myNode->third);
@@ -552,7 +571,68 @@ void funcOut(treenode* myNode){
 }
 
 void funcIf(treenode* myNode){
+	char* temp = getTempName();
+	char tempName[20];
+	strcpy(tempName, temp);
+	
+	char* temp1 = getLabelName();
+	char labelName[20];
+	strcpy(labelName, temp1);
 
+	checkNode(myNode->first);
+	writeFile("STORE", tempName);
+	checkNode(myNode->third);
+	
+	if(strcmp(myNode->second->first->value.tkInstance, "[=]")==0){
+		char* temp2 = getTempName();
+		char tempName1[20];
+		strcpy(tempName1, temp2);
+		
+		writeFile("STORE", tempName1);
+		
+		char* temp3 = getLabelName();
+		char labelPos[20];
+		strcpy(labelPos, temp3);
+		
+		writeFile("LOAD", tempName);
+		writeFile("BRZPOS", labelPos);
+		writeFile("LOAD", tempName1);
+		writeFile("BRZPOS", labelName);
+		
+		char labelPosPlus[20];
+		strcpy(labelPosPlus, labelPos);
+		strcat(labelPosPlus, ":");
+		
+		writeFile(labelPosPlus,"NOOP");
+		writeFile("LOAD", tempName1);
+		writeFile("BRNEG", labelName);
+	}else{
+		writeFile("SUB", tempName);
+	}
+	checkNode(myNode->second);
+	checkNode(myNode->fourth);
+	
+	char labelNamePlus[20];
+	strcpy(labelNamePlus, labelName);
+	strcat(labelNamePlus, ":");
+
+	if(myNode->fifth != NULL){
+		char* temp4 = getLabelName();
+		char labelName2[20];
+		strcpy(labelName2, temp4);
+		
+		writeFile("BR", labelName2);
+		writeFile(labelNamePlus, "NOOP");
+		checkNode(myNode->fifth);
+		
+		char labelName2Plus[20];
+		strcpy(labelName2Plus, labelName2);
+		strcat(labelName2Plus, ":");
+		
+		writeFile(labelName2Plus, "NOOP");
+	}else{
+		writeFile(labelNamePlus, "NOOP");
+	}
 }
 
 

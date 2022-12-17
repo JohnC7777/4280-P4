@@ -3,10 +3,13 @@
 
 
 
-# p4g3, test mathematical operations #
-whole yx := 3 ;
+# p4g4, testing relational operators, will need separate one #
 program
 begin
-   assign yx = 5 * 7 - 11 + 13 / : 15 ;
-   output yx ;
+   whole ab := 5 ;
+   whole cd := 7 ;
+   if [ ab == cd ] then 
+   begin
+      output 1 ;
+   end ;
 end

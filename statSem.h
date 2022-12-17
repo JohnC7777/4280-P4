@@ -7,6 +7,8 @@ void writeFile(char*, char*);
 void checkNode(treenode*);
 bool findGlobal(char*);
 void writeVariables();
+char* getTempName();
+char* getLabelName();
 
 void funcR(treenode*);
 void funcInput(treenode*);
