@@ -641,6 +641,28 @@ void funcLoop(treenode* myNode){
 }
 
 void funcRO(treenode* myNode){
+	
+	char temp1[20];
+	strcpy(temp1, "");
+	strcat(temp1, "L");
+	char temp[5];
+	sprintf(temp, "%d", numLabels);
+	strcat(temp1, temp);
+
+	if (strcmp(myNode->first->value.tkInstance,">")==0) {
+		writeFile("BRZPOS", temp1);
+	} else if (strcmp(myNode->first->value.tkInstance, "<")==0) {
+		writeFile("BRZNEG", temp1);
+	} else if (strcmp(myNode->first->value.tkInstance,"==")==0) {
+		writeFile("BRPOS", temp1);
+		writeFile("BRNEG", temp1);
+	} else if (strcmp(myNode->first->value.tkInstance, "[=]")==0) {
+	} else if (strcmp(myNode->first->value.tkInstance, "!=")==0) {
+		writeFile("BRZERO", temp1);
+	} else {
+		printf("ERROR: Couldn't find the RO\n");
+		exit(1);
+	}
 
 }
 
