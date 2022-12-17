@@ -637,6 +637,61 @@ void funcIf(treenode* myNode){
 
 
 void funcLoop(treenode* myNode){
+	char* temp = getLabelName();
+	char startLabel[20];
+	strcpy(startLabel, temp);
+	
+	char startLabelPlus[20];
+	strcpy(startLabelPlus, startLabel);
+	strcat(startLabelPlus, ":");
+	
+	writeFile(startLabelPlus, "NOOP");
+	
+	char* temp1 = getLabelName();
+	char exitLabel[20];
+	strcpy(exitLabel, temp1);
+
+	char exitLabelPlus[20];
+	strcpy(exitLabelPlus, exitLabel);
+	strcat(exitLabelPlus, ":");
+	
+	char* temp2 = getTempName();
+	char tempName1[20];
+	strcpy(tempName1, temp2);
+	
+	checkNode(myNode->first);
+	writeFile("STORE", tempName1);
+	checkNode(myNode->third);
+	
+	if(strcmp(myNode->second->first->value.tkInstance, "[=]")==0){
+		char* temp3 = getTempName();
+		char tempName2[20];
+		strcpy(tempName2, temp3);
+		
+		writeFile("STORE", tempName2);
+		
+		char* temp4 = getLabelName;
+		char posLabel[20];
+		strcpy(posLabel, temp4);
+		
+		char posLabelPlus[20];
+		strcpy(posLabelPlus, posLabel);
+		strcat(posLabelPlus, ":");
+		
+		writeFile("LOAD", tempName1);
+		writeFile("BRZPOS", posLabel);
+		writeFile("LOAD", tempName2);
+		writeFile("BRZPOS", exitLabel);
+		writeFile(posLabelPlus, "NOOP");
+		writeFile("LOAD", tempName2);
+		writeFile("BRNEG", exitLabel);
+	}else{
+		writeFile("SUB", tempName1);
+	}
+	checkNode(myNode->second);
+	checkNode(myNode->fourth);
+	writeFile("BR", startLabel);
+	writeFile(exitLabelPlus, "NOOP");
 
 }
 
