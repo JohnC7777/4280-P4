@@ -8,6 +8,8 @@ program
 begin
    whole ab := 5 ;
    whole cd := 7 ;
+assign cd = :cd;
+assign ab = :ab;
    if [ ab [=] cd ] then 
    begin
       output 1 ;

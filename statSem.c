@@ -583,7 +583,7 @@ void funcIf(treenode* myNode){
 	writeFile("STORE", tempName);
 	checkNode(myNode->third);
 	
-	if(strcmp(myNode->second->first->value.tkInstance, "[=]")==0){
+	if(strcmp(myNode->second->first->value.tkInstance, "[")==0){
 		char* temp2 = getTempName();
 		char tempName1[20];
 		strcpy(tempName1, temp2);
@@ -595,16 +595,14 @@ void funcIf(treenode* myNode){
 		strcpy(labelPos, temp3);
 		
 		writeFile("LOAD", tempName);
+		writeFile("MULT", tempName1);
 		writeFile("BRZPOS", labelPos);
-		writeFile("LOAD", tempName1);
-		writeFile("BRZPOS", labelName);
 		
 		char labelPosPlus[20];
 		strcpy(labelPosPlus, labelPos);
 		strcat(labelPosPlus, ":");
 		
 		writeFile(labelPosPlus,"NOOP");
-		writeFile("LOAD", tempName1);
 		writeFile("BRNEG", labelName);
 	}else{
 		writeFile("SUB", tempName);
@@ -663,7 +661,7 @@ void funcLoop(treenode* myNode){
 	writeFile("STORE", tempName1);
 	checkNode(myNode->third);
 	
-	if(strcmp(myNode->second->first->value.tkInstance, "[=]")==0){
+	if(strcmp(myNode->second->first->value.tkInstance, "[")==0){
 		char* temp3 = getTempName();
 		char tempName2[20];
 		strcpy(tempName2, temp3);
@@ -711,7 +709,7 @@ void funcRO(treenode* myNode){
 	} else if (strcmp(myNode->first->value.tkInstance,"==")==0) {
 		writeFile("BRPOS", temp1);
 		writeFile("BRNEG", temp1);
-	} else if (strcmp(myNode->first->value.tkInstance, "[=]")==0) {
+	} else if (strcmp(myNode->first->value.tkInstance, "[")==0) {
 	} else if (strcmp(myNode->first->value.tkInstance, "!=")==0) {
 		writeFile("BRZERO", temp1);
 	} else {
