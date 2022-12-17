@@ -420,15 +420,15 @@ void funcExpr(treenode* myNode, bool prevSubtraction){
 	printf("**Entered expr function\n");
 	if(myNode->second != NULL){
 		printf("We just checked and the second is not NULL \n");
-		char* myTemp = getTempName();
-		printf("\nTHE TEMP NAME FOR EXPR-> %s\n\n", myTemp);
+		char* exprTemp = getTempName();
+		printf("\nTHE TEMP NAME FOR EXPR-> %s\n\n", exprTemp);
 		funcExpr(myNode->third, true);
-		writeFile("STORE expr", myTemp);
+		writeFile("STORE expr", exprTemp);
 		checkNode(myNode->first);
 		if(prevSubtraction){
-			writeFile("ADD", myTemp);
+			writeFile("ADD", exprTemp);
 		}else{
-			writeFile("SUB", myTemp);
+			writeFile("SUB", exprTemp);
 		}
 	}else{
 		printf("We entered the else statement!\n");
@@ -460,8 +460,8 @@ void funcN(treenode* myNode){
 void funcA(treenode* myNode){
 	printf("**Entered A function\n");
 	checkNode(myNode->first);
-	char* temp = getTempName();
-	writeFile("STORE A1", temp);
+	char* aTemp = getTempName();
+	writeFile("STORE A1", aTemp);
 	checkNode(myNode->second);
 }
 
