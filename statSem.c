@@ -122,20 +122,20 @@ char* getTempName(){
 	printf("**Entered getTempName function\n");
 	numTemporaries++;
 	free(returnWord);
-	printf("Just incremented numTemporaries and free'd returnWord\n");
+	//printf("Just incremented numTemporaries and free'd returnWord\n");
 	//char* returnWord = NULL;
-	printf("I was able to set it to NULL\n");
+	//printf("I was able to set it to NULL\n");
 	returnWord = (char *) malloc(sizeof(returnWord));
 	//returnWord = (char*) malloc(100);
-	printf("just created returnWord\n");
+	//printf("just created returnWord\n");
 	strcpy(returnWord,"");
-	printf("just set it to ''\n");
+	//printf("just set it to ''\n");
 	strcat(returnWord,"T");
-	printf("Added T to it\n");
+	//printf("Added T to it\n");
 	char temp[5];
 	sprintf(temp, "%d", numTemporaries);
 	strcat(returnWord, temp);
-	printf("Leaving getTempName function and returning:%s\n", returnWord);
+	//printf("Leaving getTempName function and returning:%s\n", returnWord);
 	return returnWord;
 }
 
@@ -275,7 +275,7 @@ void checkNode(treenode* myNode){
 		funcStats(myNode);
 	} else if (strcmp(myNode->name, "<stat>")==0) {
 		funcStat(myNode);
-	} else if (strcmp(myNode->name, "<mStat>")==0) {
+	} else if (strcmp(myNode->name, "<mstat>")==0) {
 		funcMStat(myNode);
 	} else if (strcmp(myNode->name, "<out>")==0) {
 		funcOut(myNode);
@@ -314,7 +314,7 @@ void funcR(treenode* myNode){
 	} else if (strcmp(myNode->first->value.tkInstance, "<expr>")==0) {
 		checkNode(myNode->first);
 	}else{
-		writeFile("LAOD", myNode->first->value.tkInstance);
+		writeFile("LOAD", myNode->first->value.tkInstance);
 	}
 
 }
@@ -444,7 +444,7 @@ void funcN(treenode* myNode){
 	if(myNode->third != NULL){
 		char* temp = getTempName();
 		checkNode(myNode->third);
-		writeFile("STORE", temp);
+		writeFile("STORE N", temp);
 		checkNode(myNode->first);
 		if(strcmp(myNode->second->value.tkInstance, "+")==0){
 			writeFile("ADD", temp);
@@ -460,13 +460,13 @@ void funcA(treenode* myNode){
 	printf("**Entered A function\n");
 	checkNode(myNode->first);
 	char* temp = getTempName();
-	writeFile("STORE", temp);
+	writeFile("STORE A1", temp);
 	checkNode(myNode->second);
 }
 
 void funcA2(treenode* myNode){
 	printf("**Entered A2 function");
-	if(strcmp(myNode->name,"")==0){
+	if(strcmp(myNode->first->name,"")==0){
 		return;
 	}else{
 		char* prevTemp;
@@ -478,7 +478,7 @@ void funcA2(treenode* myNode){
 
 		checkNode(myNode->first);
 		char* myTemp = getTempName();
-		writeFile("STORE", myTemp);
+		writeFile("STORE A2", myTemp);
 
 		writeFile("LOAD", prevTemp);
 		writeFile("DIV", myTemp);
@@ -492,7 +492,7 @@ void funcM(treenode* myNode){
 	if(strcmp(myNode->first->name, "<M>")==0){
 		char* temp = getTempName();
 		checkNode(myNode->first);
-		writeFile("STORE", temp);
+		writeFile("STORE M", temp);
 		writeFile("LOAD", "0");
 		writeFile("SUB", temp);		
 	}else{
@@ -511,10 +511,14 @@ void funcStat(treenode* myNode){
 }
 
 void funcMStat(treenode* myNode){
-	if(strcmp(myNode->name,"")==0){
+	printf("**Entered mstat function\n");
+	if(myNode->first == NULL){
 		return;
+	}else if (strcmp(myNode->first->name,"")==0){
+		return;
+	}else{
+		traversal(myNode);
 	}
-	traversal(myNode);
 }
 
 void funcOut(treenode* myNode){
