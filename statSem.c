@@ -668,7 +668,7 @@ void funcLoop(treenode* myNode){
 		
 		writeFile("STORE", tempName2);
 		
-		char* temp4 = getLabelName;
+		char* temp4 = getLabelName();
 		char posLabel[20];
 		strcpy(posLabel, temp4);
 		
@@ -677,11 +677,9 @@ void funcLoop(treenode* myNode){
 		strcat(posLabelPlus, ":");
 		
 		writeFile("LOAD", tempName1);
+		writeFile("MULT", tempName2);
 		writeFile("BRZPOS", posLabel);
-		writeFile("LOAD", tempName2);
-		writeFile("BRZPOS", exitLabel);
 		writeFile(posLabelPlus, "NOOP");
-		writeFile("LOAD", tempName2);
 		writeFile("BRNEG", exitLabel);
 	}else{
 		writeFile("SUB", tempName1);

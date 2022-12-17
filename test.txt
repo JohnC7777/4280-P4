@@ -3,19 +3,16 @@
 
 
 
-# p4g5, testing relational operators and pick #
+# p4g6, testing while loop #
 program
 begin
-   whole ab := 5 ;
+   whole ab := 3 ;
    whole cd := 7 ;
-assign cd = :cd;
 assign ab = :ab;
-   if [ ab [=] cd ] then 
+assign cd = :cd;
+   while [ ab [=] cd ] 
    begin
-      output 1 ;
-   end 
-   pick
-   begin
-       output 0 ;
+      output ab ;
+      assign ab = ab + 1 ;
    end ;
 end
