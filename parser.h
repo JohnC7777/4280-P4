@@ -6,7 +6,7 @@ typedef struct treenode{
 	struct treenode *third;
 	struct treenode *fourth;
 	struct treenode *fifth
-} treenode;
+}treenode;
 
 extern treenode* parsedTree;
 

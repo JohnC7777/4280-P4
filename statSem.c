@@ -249,7 +249,7 @@ traversal(treenode* myNode){
 
 void checkNode(treenode* myNode){
 
-	printf("**Entered checkNode function with name:%s\n", myNode->name);
+	//printf("**Entered checkNode function with name:%s\n", myNode->name);
 	if (strcmp(myNode->name, "<assign>")==0) {
 		funcAssign(myNode);
 	} else if (strcmp(myNode->name, "<in>")==0) {
@@ -695,7 +695,7 @@ void funcRO(treenode* myNode){
 }
 
 void funcGoto(treenode* myNode){
-	printf("Entered GOTO function\n");
+	//printf("Entered GOTO function\n");
 	writeFile("BR", myNode->first->value.tkInstance);
 }
 
