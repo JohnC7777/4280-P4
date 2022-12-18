@@ -2,17 +2,9 @@
 
 
 
-
-# p4g6, testing while loop #
+whole yx := 3 ;
 program
 begin
-   whole ab := 3 ;
-   whole cd := 7 ;
-assign ab = :ab;
-assign cd = :cd;
-   while [ ab [=] cd ] 
-   begin
-      output ab ;
-      assign ab = ab + 1 ;
-   end ;
+   assign yx = :( 2 * 2 - 10 + 100 / 10) ;
+   output yx ;
 end

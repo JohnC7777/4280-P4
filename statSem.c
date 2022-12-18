@@ -328,8 +328,13 @@ void funcR(treenode* myNode){
 			sprintf(temp, "%d", found);
 			writeFile("STACKR", temp);
 		}
-	} else if (strcmp(myNode->first->value.tkInstance, "<expr>")==0) {
-		checkNode(myNode->first);
+	} else if (myNode->second != NULL){
+		if (strcmp(myNode->second->name, "<expr>")==0) {
+			printf("\nIT HAPPENED!\n\n");
+			checkNode(myNode->second);
+		}else{
+			writeFile("LOAD", myNode->first->value.tkInstance);
+		}
 	}else{
 		writeFile("LOAD", myNode->first->value.tkInstance);
 	}
