@@ -175,7 +175,8 @@ void statSem(char* filename){
 	traversal(parsedTree);
 	writeFile("STOP", "N/A");
 	writeVariables();
-	printf("No errors detected!\n");
+	//printf("No errors detected!\n");
+	printf("Created file named: %s\n", assemblyFileName);
 }
 
 void writeFile(char* statement, char* arg1){
