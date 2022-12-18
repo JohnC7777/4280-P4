@@ -120,29 +120,21 @@ bool findGlobal(char* var){
 char* returnWord = NULL;
 
 char* getTempName(){
-	printf("**Entered getTempName function\n");
+	//printf("**Entered getTempName function\n");
 	numTemporaries++;
 	free(returnWord);
-	//printf("Just incremented numTemporaries and free'd returnWord\n");
-	//char* returnWord = NULL;
-	//printf("I was able to set it to NULL\n");
 	returnWord = (char *) malloc(sizeof(returnWord));
-	//returnWord = (char*) malloc(100);
-	//printf("just created returnWord\n");
 	strcpy(returnWord,"");
-	//printf("just set it to ''\n");
 	strcat(returnWord,"T");
-	//printf("Added T to it\n");
 	char temp[5];
 	sprintf(temp, "%d", numTemporaries);
 	strcat(returnWord, temp);
-	//printf("Leaving getTempName function and returning:%s\n", returnWord);
 	return returnWord;
 }
 
 char* returnWord1 = NULL;
 char* getLabelName(){
-	printf("**Entered getLabelName function\n");
+	//printf("**Entered getLabelName function\n");
 	numLabels++;
 	free(returnWord1);
 	returnWord1 = (char *) malloc(sizeof(returnWord1));
@@ -175,7 +167,6 @@ void writeVariables(){
 void statSem(char* filename){
 	fileName2 = filename;
 	assemblyFileName = strcat(fileName2, ".asm");
-	printf("This is the filename:%s\n", assemblyFileName);	
 	
 	fPointer = fopen(assemblyFileName, "w");
 	fclose(fPointer);
@@ -186,13 +177,10 @@ void statSem(char* filename){
 	writeFile("STOP", "N/A");
 	writeVariables();
 	printf("No errors detected!\n");
-	//fclose(fPointer);
 }
 
 void writeFile(char* statement, char* arg1){
-	printf("**Entered writeFile function with values:%s AND %s\n", statement, arg1, assemblyFileName);
-	//fPointer = fopen(assemblyFileName, "a");
-	printf("set the fpointer to fopen\n");
+	//printf("**Entered writeFile function with values:%s AND %s\n", statement, arg1, assemblyFileName);
 	if(!fPointer){
 		printf("ERROR: Something went wrong when trying to write to file:%s", strerror(errno));
 	}else{
@@ -204,18 +192,16 @@ void writeFile(char* statement, char* arg1){
 			fprintf(fPointer,"%s", arg1);
 		}
 		fprintf(fPointer, "\n");
-		printf("Finished writing into the file\n");
-		//fclose(fPointer);
 	}
 }
 
 
 traversal(treenode* myNode){
-	printf("**Entering traversal function with name:%s\n", myNode->name);
+	//printf("**Entering traversal function with name:%s\n", myNode->name);
 	int varsCount = 0;
 	int i;
 	for (i = 1; i < 6; i++) {
-		printf("traversing children with i=%d\n", i);
+		//printf("traversing children with i=%d\n", i);
 		treenode* currentChild;
 		if (i == 1) {
 			if(myNode->first==NULL){
@@ -248,10 +234,8 @@ traversal(treenode* myNode){
 			continue;
 		}
 		if (strcmp(currentChild->name, "<vars>")==0) {
-			printf("About to go into vars function\n");
 			funcVars(currentChild, &varsCount);
 		} else {
-			printf("About to go into checkNode\n");
 			checkNode(currentChild);
 		}
 	}
@@ -267,7 +251,6 @@ traversal(treenode* myNode){
 void checkNode(treenode* myNode){
 
 	printf("**Entered checkNode function with name:%s\n", myNode->name);
-		
 	if (strcmp(myNode->name, "<assign>")==0) {
 		funcAssign(myNode);
 	} else if (strcmp(myNode->name, "<in>")==0) {
@@ -312,7 +295,7 @@ void checkNode(treenode* myNode){
 
 
 void funcR(treenode* myNode){
-	printf("**Entered R function\n");
+	//printf("**Entered R function\n");
 	if (myNode->first->value.tokenID == 1) {
 		int found = find(myNode->first->value.tkInstance);
 		if (found == -1) {
@@ -320,7 +303,6 @@ void funcR(treenode* myNode){
 			exit(1);
 		}
 		bool isGlobalVar = findGlobal(myNode->first->value.tkInstance);
-		printf("isGlobalVar returned: %d\n", isGlobalVar);
 		if(isGlobalVar){
 			writeFile("LOAD", myNode->first->value.tkInstance);
 		}else{
@@ -330,7 +312,6 @@ void funcR(treenode* myNode){
 		}
 	} else if (myNode->second != NULL){
 		if (strcmp(myNode->second->name, "<expr>")==0) {
-			printf("\nIT HAPPENED!\n\n");
 			checkNode(myNode->second);
 		}else{
 			writeFile("LOAD", myNode->first->value.tkInstance);
@@ -342,7 +323,7 @@ void funcR(treenode* myNode){
 }
 
 void funcInput(treenode* myNode){
-	printf("**Entering input function\n");
+	//printf("**Entering input function\n");
 	int found = find(myNode->first->value.tkInstance);
 	if (found == -1) {
 		printf("ERROR: Input found unknown variable! On line:%d Instance'%s'\n", myNode->first->value.lineNum, myNode->first->value.tkInstance);
@@ -383,7 +364,7 @@ void funcAssign(treenode* myNode){
 }
 
 void funcVars(treenode* myNode, int *varsCount){
-	printf("**Entered vars function!\n");
+	//printf("**Entered vars function!\n");
 	treenode* currentNode = myNode;
 	treenode* identNode;
 	while(true) {
@@ -397,7 +378,6 @@ void funcVars(treenode* myNode, int *varsCount){
 			break;
 		} else {
 			int found = find(identNode->value.tkInstance);
-			printf("we succesfully found:%d\n", found);
 			if (found != -1) {
 				printf("ERROR: Duplicate variable name! On Line:%d Instance:'%s'\n", identNode->value.lineNum, identNode->value.tkInstance);
 				exit(1);
@@ -426,7 +406,7 @@ void funcVars(treenode* myNode, int *varsCount){
 }
 
 void funcLabel(treenode* myNode){
-	char* temp;
+	char temp[20];
 	strcpy(temp, "");
 	strcat(temp, myNode->first->value.tkInstance);
 	strcat(temp, ":");
@@ -434,19 +414,18 @@ void funcLabel(treenode* myNode){
 }
 
 void funcBlock(treenode* myNode){
-	printf("**Entered block function\n");
+	//printf("**Entered block function\n");
 	traversal(myNode);
 }
 
 void funcExpr(treenode* myNode, bool prevSubtraction){
-	printf("**Entered expr function\n");
+	//printf("**Entered expr function\n");
 	if(myNode->second != NULL){
-		printf("We just checked and the second is not NULL \n");
 		char* temp = getTempName();
 		char exprTemp[20];
 		strcpy(exprTemp, temp);
 		funcExpr(myNode->third, true);
-		writeFile("STORE expr", exprTemp);
+		writeFile("STORE", exprTemp);
 		checkNode(myNode->first);
 		if(prevSubtraction){
 			writeFile("ADD", exprTemp);
@@ -454,7 +433,6 @@ void funcExpr(treenode* myNode, bool prevSubtraction){
 			writeFile("SUB", exprTemp);
 		}
 	}else{
-		printf("We entered the else statement!\n");
 		if(myNode->first==NULL){
 			printf("It is NULL!!!!\n");
 		}
@@ -464,13 +442,13 @@ void funcExpr(treenode* myNode, bool prevSubtraction){
 }
 
 void funcN(treenode* myNode){
-	printf("**Entered N function\n");
+	//printf("**Entered N function\n");
 	if(myNode->third != NULL){
 		char* temp1 = getTempName();
 		char temp[20];
 		strcpy(temp, temp1);
 		checkNode(myNode->third);
-		writeFile("STORE N", temp);
+		writeFile("STORE", temp);
 		checkNode(myNode->first);
 		if(strcmp(myNode->second->value.tkInstance, "+")==0){
 			writeFile("ADD", temp);
@@ -483,23 +461,20 @@ void funcN(treenode* myNode){
 }
 
 void funcA(treenode* myNode){
-	printf("**Entered A function\n");
+	//printf("**Entered A function\n");
 	checkNode(myNode->first);
 	char* temp = getTempName();
 	char aTemp[20];
 	strcpy(aTemp, temp);
-	writeFile("STORE A1", aTemp);
+	writeFile("STORE", aTemp);
 	checkNode(myNode->second);
 }
 
 void funcA2(treenode* myNode){
-	printf("**Entered A2 function");
+	//printf("**Entered A2 function");
 	if(myNode->first == NULL){
-		printf("\nTHIS SHOULD NOT HAVE HAPPENED!\n\n");
 		return;
 	}else if (strcmp(myNode->first->value.tkInstance, "/")==0){
-		printf("\nTHIS SHOULD HAVE HAPPENED!\n\n");
-
 		char* prevTemp = NULL;
 		prevTemp = (char *) malloc(sizeof(prevTemp));
 		strcpy(prevTemp, "");
@@ -510,13 +485,12 @@ void funcA2(treenode* myNode){
 		char actualPrevTemp[20];
 		strcpy(actualPrevTemp, prevTemp);
 		
-		printf("finished making the string prevTemp with value:%s", prevTemp);
 
 		checkNode(myNode->second);
 		char* temp1 = getTempName();
 		char myTemp[20];
 		strcpy(myTemp, temp1);
-		writeFile("STORE A2", myTemp);
+		writeFile("STORE", myTemp);
 
 		writeFile("LOAD", actualPrevTemp);
 		writeFile("DIV", myTemp);
@@ -529,13 +503,13 @@ void funcA2(treenode* myNode){
 }
 
 void funcM(treenode* myNode){
-	printf("**Entered M function\n");
+	//printf("**Entered M function\n");
 	if(strcmp(myNode->first->value.tkInstance, ":")==0){
 		char* temp1 = getTempName();
 		char temp[20];
 		strcpy(temp, temp1);
 		checkNode(myNode->second);
-		writeFile("STORE M", temp);
+		writeFile("STORE", temp);
 		writeFile("LOAD", "0");
 		writeFile("SUB", temp);		
 	}else{
@@ -544,17 +518,17 @@ void funcM(treenode* myNode){
 }
 
 void funcStats(treenode* myNode){
-	printf("**Entered stats function\n");
+	//printf("**Entered stats function\n");
 	traversal(myNode);
 }
 
 void funcStat(treenode* myNode){
-	printf("**Entered stat function\n");
+	//printf("**Entered stat function\n");
 	traversal(myNode);
 }
 
 void funcMStat(treenode* myNode){
-	printf("**Entered mstat function\n");
+	//printf("**Entered mstat function\n");
 	if(myNode->first == NULL){
 		return;
 	}else if (strcmp(myNode->first->name,"")==0){
@@ -565,11 +539,10 @@ void funcMStat(treenode* myNode){
 }
 
 void funcOut(treenode* myNode){
-	printf("**Entered out function\n");
+	//printf("**Entered out function\n");
 	char* temp1 = getTempName();
 	char temp[20];
 	strcpy(temp, temp1);
-	printf("set temp to getTempName\n");
 	checkNode(myNode->first);
 	writeFile("STORE", temp);
 	writeFile("WRITE", temp);
@@ -723,6 +696,7 @@ void funcRO(treenode* myNode){
 }
 
 void funcGoto(treenode* myNode){
+	printf("Entered GOTO function\n");
 	writeFile("BR", myNode->first->value.tkInstance);
 }
 

@@ -1,10 +1,14 @@
 
 
 
-
-whole yx := 3 ;
+# p4g6, testing while loop #
 program
 begin
-   assign yx = :( 2 * 2 - 10 + 100 / 10) ;
-   output yx ;
+   whole ab := 3 ;
+   whole cd := 7 ;
+   while [ ab < cd ] 
+   begin
+      output ab ;
+      assign ab = ab + 1 ;
+   end ;
 end
