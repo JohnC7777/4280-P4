@@ -48,7 +48,6 @@ void pop(){
 	stack *tmp = stack1;
 	stack1 = stack1->next;
 	free(tmp);
-	printf("%s\n", result);
 }
 
 
